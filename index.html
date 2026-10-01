@@ -135,7 +135,7 @@
     <p class="lede">
       Video generation models have achieved remarkable visual fidelity and have strong potential to become general-purpose world simulators. Despite this progress, they still fail to generate videos which adhere to laws of physics. The problem becomes even more apparent in realistic settings where multiple physical principles must work together within the same video &mdash; for example, <em>&ldquo;a balloon floating upward while steam rises from a pot&rdquo;</em> requires buoyancy and fluid dynamics to unfold coherently and simultaneously. Yet existing methods largely ignore multi-principle interactions, focusing on a single principle per video.
     </p>
-    <p class="lede" style="margin-top:22px; color:var(--ink-soft)">
+    <p class="lede" style="margin-top:22px">
       We propose <b style="color:var(--ink)">HiPhy</b> (<b>Hi</b>erarchical <b>Phy</b>sical Alignment), a reinforcement learning framework that grounds video generation in physical laws through a dual-level objective: locally enforcing the temporal dynamics of individual physical principles, and globally ensuring the physical and semantic coherence of the entire scene. To support multi-principle generation, we construct a 50K-prompt dataset and introduce a prompt benchmark <b style="color:var(--ink)">MultiPhyBench</b>, spanning a diverse range of co-occurring physical events. Our experiments show that HiPhy significantly outperforms prior methods and baselines, improving physical commonsense and semantic alignment across various benchmarks &mdash; with the largest gains on scenes involving multiple physical principles, where competing methods degrade most sharply.
     </p>
   </div>
