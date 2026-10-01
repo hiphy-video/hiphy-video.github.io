@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HiPhy: Hierarchical Alignment for Physically-Plausible Multi-Principle Video Generation</title>
+<meta name="description" content="HiPhy is a reinforcement learning framework that grounds video generation in physical laws through a dual-level, hierarchical alignment objective — enabling physically plausible video generation for scenes with multiple concurrent physical principles.">
+<meta property="og:title" content="HiPhy: Hierarchical Alignment for Physically-Plausible Multi-Principle Video Generation">
+<meta property="og:description" content="A reinforcement learning framework for physically-plausible, multi-principle video generation.">
+<meta property="og:image" content="static/images/teaser-figure.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%230d7d72'/%3E%3Ccircle cx='50' cy='50' r='9' fill='white'/%3E%3Cellipse cx='50' cy='50' rx='42' ry='16' fill='none' stroke='white' stroke-width='5' transform='rotate(0 50 50)'/%3E%3Cellipse cx='50' cy='50' rx='42' ry='16' fill='none' stroke='white' stroke-width='5' transform='rotate(60 50 50)'/%3E%3Cellipse cx='50' cy='50' rx='42' ry='16' fill='none' stroke='white' stroke-width='5' transform='rotate(120 50 50)'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+
+<div class="topnav">
+  <div class="wrap">
+    <div class="brand">Hi<span>Phy</span></div>
+    <nav>
+      <a href="#abstract">Abstract</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#comparisons">Comparisons</a>
+      <a href="#ablation">Ablation</a>
+      <a href="#bibtex">BibTeX</a>
+    </nav>
+  </div>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap">
+    <h1>HiPhy
+      <span class="full">Hierarchical Alignment for Physically-Plausible Multi-Principle Video Generation</span>
+    </h1>
+
+    <p class="authors">
+      <a href="https://tahirakazimi.github.io/" target="_blank" rel="noopener">Tahira Kazimi</a><span class="sup">1</span>,
+      <span class="noaffil">Shubhankar Borse</span><span class="sup">2</span>,
+      <span class="noaffil">Munawar Hayat</span><span class="sup">2</span>,
+      <span class="noaffil">Fatih Porikli</span><span class="sup">2</span>,
+      <a href="https://pinguar.org/" target="_blank" rel="noopener">Pinar Yanardag</a><span class="sup">1</span>
+    </p>
+    <p class="affils"><sup>1</sup>Virginia Tech &nbsp;&nbsp;&middot;&nbsp;&nbsp; <sup>2</sup>Qualcomm AI Research</p>
+
+    <span class="venue">NeurIPS 2026</span>
+
+    <div class="btnrow">
+      <span class="btn disabled" aria-disabled="true" title="Coming soon">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" stroke="currentColor" stroke-width="1.6"/><path d="M9.5 15.5v-7l5 3.5-5 3.5Z" fill="currentColor"/></svg>
+        arXiv <span class="soon">Soon</span>
+      </span>
+      <span class="btn disabled" aria-disabled="true" title="Coming soon">
+        <svg viewBox="0 0 24 24" fill="none"><path d="m9 18-5-6 5-6M15 6l5 6-5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Code <span class="soon">Soon</span>
+      </span>
+      <a class="btn" href="#bibtex">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 10h8M8 14h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        BibTeX
+      </a>
+    </div>
+
+    <div class="pair-grid">
+
+      <div class="pair-card">
+        <p class="pair-prompt">&ldquo;A sponge is squeezed over a bowl of water while bubbles rise in a fish tank beside it.&rdquo;</p>
+        <p class="pair-physics">Elastic deformation &middot; fluid dynamics</p>
+        <div class="pair-videos">
+          <div class="vcell">
+            <h4>Wan</h4>
+            <div class="vframe"><video data-autoplay muted loop playsinline controls preload="none">
+              <source src="media/teaser/wan/A_sponge_is_squeezed_over_a_bowl_of_water_while_bubbles_rise_in_a_fish_tank_beside_it._id9_3838325787_5.mp4" type="video/mp4"></video></div>
+            <div class="tags"><span class="tag bad">✗ No deformation</span><span class="tag bad">✗ No bubbles</span></div>
+          </div>
+          <div class="vcell is-ours">
+            <h4>HiPhy</h4>
+            <div class="vframe"><video data-autoplay muted loop playsinline controls preload="none">
+              <source src="media/teaser/ours/A_sponge_is_squeezed_over_a_bowl_of_water_while_bubbles_rise_in_a_fish_tank_beside_it._id9_1523639040_11.mp4" type="video/mp4"></video></div>
+            <div class="tags"><span class="tag good">✓ Elastic deformation</span><span class="tag good">✓ Water bubbles</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pair-card">
+        <p class="pair-prompt">&ldquo;A hammer strikes a nail into wood while a pot of water boils on the stove beside it.&rdquo;</p>
+        <p class="pair-physics">Impact mechanics &middot; fluid thermodynamics</p>
+        <div class="pair-videos">
+          <div class="vcell">
+            <h4>Wan</h4>
+            <div class="vframe"><video data-autoplay muted loop playsinline controls preload="none">
+              <source src="media/teaser/wan/A_hammer_strikes_a_nail_into_wood_while_a_pot_of_water_boils_on_the_stove_beside_it._id4_816428839_0.mp4" type="video/mp4"></video></div>
+            <div class="tags"><span class="tag bad">✗ No force transfer</span><span class="tag bad">✗ No boiling</span></div>
+          </div>
+          <div class="vcell is-ours">
+            <h4>HiPhy</h4>
+            <div class="vframe"><video data-autoplay muted loop playsinline controls preload="none">
+              <source src="media/teaser/ours/A_hammer_strikes_a_nail_into_wood_while_a_pot_of_water_boils_on_the_stove_beside_it._id4_3120948305_12.mp4" type="video/mp4"></video></div>
+            <div class="tags"><span class="tag good">✓ Nail driven into wood</span><span class="tag good">✓ Water boiling</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pair-card">
+        <p class="pair-prompt">&ldquo;A balloon floats upward while steam rises from a pot on the stove below it.&rdquo;</p>
+        <p class="pair-physics">Buoyancy &middot; convective phase transition</p>
+        <div class="pair-videos">
+          <div class="vcell">
+            <h4>Wan</h4>
+            <div class="vframe"><video data-autoplay muted loop playsinline controls preload="none">
+              <source src="media/teaser/wan/A_balloon_floats_upward_while_steam_rises_from_a_pot_on_the_stove_below_it._id14_704769620_2.mp4" type="video/mp4"></video></div>
+            <div class="tags"><span class="tag bad">✗ No steam</span><span class="tag bad">✗ Implausible buoyancy</span></div>
+          </div>
+          <div class="vcell is-ours">
+            <h4>HiPhy</h4>
+            <div class="vframe"><video data-autoplay muted loop playsinline controls preload="none">
+              <source src="media/teaser/ours/A_balloon_floats_upward_while_steam_rises_from_a_pot_on_the_stove_below_it._id14_1016857633_54.mp4" type="video/mp4"></video></div>
+            <div class="tags"><span class="tag good">✓ Steam rising</span><span class="tag good">✓ Balloon floating</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+<!-- ===================== ABSTRACT ===================== -->
+<section class="alt" id="abstract">
+  <div class="wrap">
+    <div class="section-head" style="max-width:860px">
+      <h2>Abstract</h2>
+    </div>
+    <p class="lede">
+      Video generation models have achieved remarkable visual fidelity and have strong potential to become general-purpose world simulators. Despite this progress, they still fail to generate videos which adhere to laws of physics. The problem becomes even more apparent in realistic settings where multiple physical principles must work together within the same video &mdash; for example, <em>&ldquo;a balloon floating upward while steam rises from a pot&rdquo;</em> requires buoyancy and fluid dynamics to unfold coherently and simultaneously. Yet existing methods largely ignore multi-principle interactions, focusing on a single principle per video.
+    </p>
+    <p class="lede" style="margin-top:22px; font-size:1.08rem; color:var(--ink-soft)">
+      We propose <b style="color:var(--ink)">HiPhy</b> (<b>Hi</b>erarchical <b>Phy</b>sical Alignment), a reinforcement learning framework that grounds video generation in physical laws through a dual-level objective: locally enforcing the temporal dynamics of individual physical principles, and globally ensuring the physical and semantic coherence of the entire scene. To support multi-principle generation, we construct a 50K-prompt dataset and introduce a prompt benchmark <b style="color:var(--ink)">MultiPhyBench</b>, spanning a diverse range of co-occurring physical events. Our experiments show that HiPhy significantly outperforms prior methods and baselines, improving physical commonsense and semantic alignment across various benchmarks &mdash; with the largest gains on scenes involving multiple physical principles, where competing methods degrade most sharply.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== METHOD ===================== -->
+<section id="method">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Method</h2>
+      <p>Models aren&rsquo;t short on visual capability &mdash; given a detailed enough prompt they render individual principles with striking fidelity. The failure shows up specifically when several principles must unfold <i>together</i>, along two distinct axes.</p>
+    </div>
+
+    <div class="method-grid">
+      <div class="method-copy">
+        <ul class="failure-list">
+          <li>
+            <span class="dot">1</span>
+            <div><b>Principle Omission.</b><br><span>Secondary physics gets dropped entirely &mdash; the apple falls realistically, but the water it lands in stays undisturbed.</span></div>
+          </li>
+          <li>
+            <span class="dot">2</span>
+            <div><b>Temporal Shortcutting.</b><br><span>Unfolding dynamics collapse into a single visual snapshot &mdash; a splash rendered as a static spraying effect instead of progressing through impact &rarr; crown formation &rarr; submersion.</span></div>
+          </li>
+        </ul>
+        <p>HiPhy&rsquo;s dual-level design addresses both directly: per-principle supervision targets <b>Principle Omission</b>, while fine-grained sub-stage reward design addresses <b>Temporal Shortcutting</b>. At the foundational level, HiPhy explicitly optimizes the chronological progression of each physical event by breaking it into smaller stages; at the same time, it aligns these stages with global video coherence and semantic alignment objectives, so multi-principle interactions compose naturally.</p>
+      </div>
+
+      <div class="diagram-card">
+        <img src="static/images/hierarchy-diagram.png" alt="HiPhy explicitly decomposes complex physical events, such as an apple falling into water, into temporally ordered sub-stages: Falling, Splash on contact, and Submersion.">
+        <p class="diagram-caption"><b>HiPhy explicitly decomposes</b> complex physical events (e.g., &ldquo;an apple falling into water&rdquo;) into temporally ordered sub-stages. This lets the reward recursively score the chronological progression, completeness, and alignment of the underlying physics.</p>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="num">50K</div><div class="lbl">Training prompts spanning co-occurring physical events</div></div>
+      <div class="stat"><div class="num">MultiPhyBench</div><div class="lbl">New benchmark for multi-principle physical alignment</div></div>
+      <div class="stat"><div class="num">Local + Global</div><div class="lbl">Dual-level reward: per-principle stages and whole-scene coherence</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== RESULTS ===================== -->
+<section class="alt" id="results">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Results</h2>
+      <p>HiPhy (right of each pair) versus the Wan base model (left), across rigid-body, fluid, and deformation events.</p>
+    </div>
+
+    <div class="duo-grid">
+
+      <div class="pair-card">
+        <p class="pair-prompt">A colorful rubber ball is dropped from a height, bouncing as it contacts the floor.</p>
+        <div class="pair-videos">
+          <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wan/the_video_captures_view_of_a_colorful_rubber_ball_being_dropped_from_a_height._the_ball_is_primarily_red,_but__3582027789.mp4" type="video/mp4"></video></div></div>
+          <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/ours/the_video_captures_a_dynamic_scene_where_a_colorful_rubber_ball_is_dropped_from_a_height._as_the_ball_descends_3489415677.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+
+      <div class="pair-card">
+        <p class="pair-prompt">A knife skillfully slices an apple.</p>
+        <div class="pair-videos">
+          <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wan/the_knife_skillfully_slices_an_apple.mp4" type="video/mp4"></video></div></div>
+          <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/ours/The_knife_skillfully_slices_an_apple._cap0_507554479.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+
+      <div class="pair-card">
+        <p class="pair-prompt">A leaf falls from a tree while rain hits a puddle below.</p>
+        <div class="pair-videos">
+          <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wan/A_leaf_falls_from_a_tree_while_rain_hits_a_puddle_below._id18_821864219_13.mp4" type="video/mp4"></video></div></div>
+          <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/ours/A_leaf_falls_from_a_tree_while_rain_hits_a_puddle_below._id18_3720736977_71.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+
+      <div class="pair-card">
+        <p class="pair-prompt">A glove catching a fast-moving baseball.</p>
+        <div class="pair-videos">
+          <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wan/a_glove_catching_the_fast_moving_baseball_seed42.mp4" type="video/mp4"></video></div></div>
+          <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/ours/A_glove_catching_the_fast-moving_baseball._cap1_372129952.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+
+      <div class="pair-card">
+        <p class="pair-prompt">A gymnast performs an aerial somersault at sunrise.</p>
+        <div class="pair-videos">
+          <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wan/Gymnast_performs_an_aerial_somersault_at_sunrise_id21_3838325787_23.mp4" type="video/mp4"></video></div></div>
+          <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/ours/A_gymnast_sprints_forward_and_plants_both_feet_simultaneously_into_the_ground,_driving_both_knees_upward_and_s_1490893324.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+
+      <div class="pair-card">
+        <p class="pair-prompt">A skateboard performs jumps while splashing through a large puddle on a street.</p>
+        <div class="pair-videos">
+          <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wan/A_skateboard_performs_jumps_while_splashing_through_a_large_puddle_on_a_street_id20_816428839_18.mp4" type="video/mp4"></video></div></div>
+          <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/ours/the_video_captures_a_dramatic_scene_of_a_skateboard_splashing_through_a_large_puddle_on_a_street._the_skateboa_1490893324.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+
+      <div class="pair-card">
+        <p class="pair-prompt">A stick of incense burns while honey drips slowly from a spoon beside it.</p>
+        <div class="pair-videos">
+          <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wan/A_stick_of_incense_burns_while_honey_drips_slowly_from_a_spoon_beside_it._id19_821864219_16.mp4" type="video/mp4"></video></div></div>
+          <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/ours/A_stick_of_incense_burns_while_honey_drips_slowly_from_a_spoon_beside_it._id19_1016857633_74.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+
+      <div class="pair-card">
+        <p class="pair-prompt">Camera focuses on a toothpaste tube while a hand squeezes a steady stream of toothpaste.</p>
+        <div class="pair-videos">
+          <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wan/Camera_focuses_on_a_toothpaste_tube_while_a_hand_squeezes_a_steady_stream _of_toothpaste.mp4" type="video/mp4"></video></div></div>
+          <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/ours/Camera_focuses_on_a_toothpaste_tube_while_a_hand_squeezes_a_steady_stream _of_toothpaste.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Appendix / additional results, collapsed -->
+    <div class="more-panel" id="more-results">
+      <div class="duo-grid" style="margin-top:28px">
+
+        <div class="pair-card">
+          <p class="pair-prompt">A metal can is crushed underfoot while a crumpled piece of paper slowly unfolds and partially recovers its shape.</p>
+          <div class="pair-videos">
+            <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/appendix/wan/050.mp4" type="video/mp4"></video></div></div>
+            <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/appendix/ours/050_deformation_plus_rigid_ours_2158790854.mp4" type="video/mp4"></video></div></div>
+          </div>
+        </div>
+
+        <div class="pair-card">
+          <p class="pair-prompt">A glass bottle rolls off a pier, falls into the water, bobs back up, and floats.</p>
+          <div class="pair-videos">
+            <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/appendix/wan/096.mp4" type="video/mp4"></video></div></div>
+            <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/appendix/ours/096_complex_multi_process_ours_1722932940.mp4" type="video/mp4"></video></div></div>
+          </div>
+        </div>
+
+        <div class="pair-card">
+          <p class="pair-prompt">A woman doing a pirouette in an empty dance studio.</p>
+          <div class="pair-videos">
+            <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/appendix/wan/A_woman_doing_a_pirouette_in_an_empty_dance_studio._1478444726.mp4" type="video/mp4"></video></div></div>
+            <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/appendix/ours/A_woman_doing_a_pirouette_in_an_empty_dance_studio.mp4" type="video/mp4"></video></div></div>
+          </div>
+        </div>
+
+        <div class="pair-card">
+          <p class="pair-prompt">A slow-motion close-up of a chef slicing a tomato.</p>
+          <div class="pair-videos">
+            <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/appendix/wan/A_slow-motion_close-up_of_a_chef_slicing_a_tomato._1755459507.mp4" type="video/mp4"></video></div></div>
+            <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/appendix/ours/A_slow-motion_close-up_of_a_chef_slicing_a_tomato.mp4" type="video/mp4"></video></div></div>
+          </div>
+        </div>
+
+        <div class="pair-card">
+          <p class="pair-prompt">A figure skater executes a powerful spin.</p>
+          <div class="pair-videos">
+            <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/appendix/wan/A_figure_skater_executes_a_powerful_spin.mp4" type="video/mp4"></video></div></div>
+            <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/appendix/ours/A_figure_skater_executes_a_powerful_spin.mp4" type="video/mp4"></video></div></div>
+          </div>
+        </div>
+
+        <div class="pair-card">
+          <p class="pair-prompt">A ballet dancer twirls on the surface of a still lake at sunset.</p>
+          <div class="pair-videos">
+            <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/appendix/wan/output_base_ballet_3489415677.mp4" type="video/mp4"></video></div></div>
+            <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/appendix/ours/A_ballet_dancer_twirls_on_the_surface_of_a_still_lake_at_sunset.mp4" type="video/mp4"></video></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="more-wrap">
+      <button class="btn ghost" data-toggle="more-results" data-more="Show 6 more comparisons ↓" data-less="Show fewer ↑">Show 6 more comparisons ↓</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COMPARISONS WITH PRIOR WORK ===================== -->
+<section id="comparisons">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Comparisons</h2>
+      <p>HiPhy against Wan, PnP, PhyT2V, and WISA on prompts that require several concurrent physical processes to resolve correctly.</p>
+    </div>
+
+    <div class="compare-row">
+      <p class="pair-prompt">A book slides over the desk while a small rubber ball falls on desk.</p>
+      <p class="pair-physics">Rigid body dynamics + elastic bouncing</p>
+      <div class="compare-5">
+        <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/ours/A_book_slides_over_the_desk_while_a_small_rubber_ball_falls_on_desk.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wan/010_base.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>PnP</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/pnp/010_pnp.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>PhyT2V</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/phyt2v/010_simultaneous_rigid_body.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>WISA</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wisa/A_book_slides_over_the_desk_while_a_small_rubber_ball_falls_on_desk.mp4" type="video/mp4"></video></div></div>
+      </div>
+    </div>
+
+    <div class="compare-row">
+      <p class="pair-prompt">Coffee accepting a gentle pour of milk.</p>
+      <p class="pair-physics">Fluid mixing</p>
+      <div class="compare-5">
+        <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/ours/Coffee_accepting_a_gentle_pour_of_milk._cap1_3614756468.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wan/Coffee_accepting_a_gentle_pour_of_milk._seed42_og.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>PnP</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/pnp/Coffee_accepting_a_gentle_pour_of_milk._pnp_42.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>PhyT2V</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/phyt2v/Coffee_accepting_a_gentle_pour_of_milk._phyt2v.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>WISA</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wisa/Coffee_accepting_a_gentle_pour_of_milk..mp4" type="video/mp4"></video></div></div>
+      </div>
+    </div>
+
+    <div class="compare-row">
+      <p class="pair-prompt">Sauce simmers in a pan on the stove while a hand is ironing a shirt on a table, and through the kitchen window rain is pouring against the window.</p>
+      <p class="pair-physics">Thermal + mechanical dynamics + fluid impact</p>
+      <div class="compare-5">
+        <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/ours/Sauce_simmers_in_a_pan_on_the_stove_releasing_steam,_at_the_ironing_board_an_iron_presses_down_on_a.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wan/output_base_iron.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>PnP</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/pnp/output_pnp_iron.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>PhyT2V</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/phyt2v/Sauce_simmers_in_a_pan_on_the_stove_releasing_steam,_at_st_the_glass.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>WISA</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wisa/0000.mp4" type="video/mp4"></video></div></div>
+      </div>
+    </div>
+
+    <div class="compare-row">
+      <p class="pair-prompt">A hand beats eggs in a bowl with a whisk, while a pot of water is boiling next to it, a single candle is also burning on the table.</p>
+      <p class="pair-physics">Mechanical emulsification + convective boiling + combustion</p>
+      <div class="compare-5">
+        <div class="vcell is-ours"><h4>HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/ours/A_hand_beats_egg_white_in_a_bowl_with_a_whisk,_the_885534436.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>Wan</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wan/output_base_egg_candle.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>PnP</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/pnp/A_hand_beats_egg_white_in_a_bowl_with_a_whisk,_whi_3248217161.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>PhyT2V</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/phyt2v/A_hand_beats_egg_white_in_a_bowl_with_a_whisk,_while_a_pot_of_water_boils._a_single_candle_burns_on_the_table._42.mp4" type="video/mp4"></video></div></div>
+        <div class="vcell"><h4>WISA</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/qualitatives/wisa/0000_4.mp4" type="video/mp4"></video></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== ABLATION ===================== -->
+<section class="alt" id="ablation">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Ablation</h2>
+      <p>HiPhy&rsquo;s hierarchical alignment objective is a training signal, not an architecture &mdash; it transfers across different video diffusion backbones.</p>
+    </div>
+
+    <p class="pair-prompt" style="text-align:center; font-size:1.05rem; margin-bottom:28px">&ldquo;A coin dances in a spiral on the table.&rdquo;</p>
+
+    <div class="backbone-grid">
+      <div class="backbone-card">
+        <span class="badge">Wan backbone</span>
+        <div class="pair-videos">
+          <div class="vcell"><h4>Base</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/ablation/wan/output_base.mp4" type="video/mp4"></video></div></div>
+          <div class="vcell is-ours"><h4>+ HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/ablation/wan/the_video_captures_a_close-up_view_of_a_coin_dancing_in_a_spiral_on_the_table._the_coin_is_silver_and_features_3582027789.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+      <div class="backbone-card">
+        <span class="badge">Veo backbone</span>
+        <div class="pair-videos">
+          <div class="vcell"><h4>Base</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/ablation/veo/Coin_dances_on_202604071654.mp4" type="video/mp4"></video></div></div>
+          <div class="vcell is-ours"><h4>+ HiPhy</h4><div class="vframe"><video data-autoplay muted loop playsinline controls preload="none"><source src="media/ablation/veo/Coin_dancing_in_202604071654.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BIBTEX ===================== -->
+<section id="bibtex">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>BibTeX</h2>
+    </div>
+    <div class="bibtex-box">
+      <button class="copy-btn">Copy</button>
+      <div id="bibtex-text"><span class="bib-kw">@inproceedings</span>{kazimi2026hiphy,
+  <span class="bib-field">title</span>     = <span class="bib-val">{HiPhy: Hierarchical Alignment for Physically-Plausible Multi-Principle Video Generation}</span>,
+  <span class="bib-field">author</span>    = <span class="bib-val">{Kazimi, Tahira and Borse, Shubhankar and Hayat, Munawar and Porikli, Fatih and Yanardag, Pinar}</span>,
+  <span class="bib-field">booktitle</span> = <span class="bib-val">{Advances in Neural Information Processing Systems (NeurIPS)}</span>,
+  <span class="bib-field">year</span>      = <span class="bib-val">{2026}</span>
+}</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Tahira Kazimi &middot; Shubhankar Borse &middot; Munawar Hayat &middot; Fatih Porikli &middot; Pinar Yanardag</p>
+    <p>Virginia Tech &middot; Qualcomm AI Research</p>
+  </div>
+</footer>
+
+<script src="static/js/main.js"></script>
+</body>
+</html>
