@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HiPhy: Hierarchical Alignment for Physically-Plausible Multi-Principle Video Generation</title>
-<meta name="description" content="HiPhy is a reinforcement learning framework that grounds video generation in physical laws through a dual-level, hierarchical alignment objective — enabling physically plausible video generation for scenes with multiple concurrent physical principles.">
+<meta name="description" content="HiPhy is a reinforcement learning framework that grounds video generation in physical laws through a dual-level, hierarchical alignment objective, enabling physically plausible video generation for scenes with multiple concurrent physical principles.">
 <meta property="og:title" content="HiPhy: Hierarchical Alignment for Physically-Plausible Multi-Principle Video Generation">
 <meta property="og:description" content="A reinforcement learning framework for physically-plausible, multi-principle video generation.">
 <meta property="og:image" content="static/images/teaser-figure.png">
@@ -133,10 +133,10 @@
       <h2>Abstract</h2>
     </div>
     <p class="lede">
-      Video generation models have achieved remarkable visual fidelity and have strong potential to become general-purpose world simulators. Despite this progress, they still fail to generate videos which adhere to laws of physics. The problem becomes even more apparent in realistic settings where multiple physical principles must work together within the same video &mdash; for example, <em>&ldquo;a balloon floating upward while steam rises from a pot&rdquo;</em> requires buoyancy and fluid dynamics to unfold coherently and simultaneously. Yet existing methods largely ignore multi-principle interactions, focusing on a single principle per video.
+      Video generation models have achieved remarkable visual fidelity and have strong potential to become general-purpose world simulators. Despite this progress, they still fail to generate videos which adhere to laws of physics. The problem becomes even more apparent in realistic settings where multiple physical principles must work together within the same video. For example, <em>&ldquo;a balloon floating upward while steam rises from a pot&rdquo;</em> requires buoyancy and fluid dynamics to unfold coherently and simultaneously. Yet existing methods largely ignore multi-principle interactions, focusing on a single principle per video.
     </p>
     <p class="lede" style="margin-top:22px">
-      We propose <b style="color:var(--ink)">HiPhy</b> (<b>Hi</b>erarchical <b>Phy</b>sical Alignment), a reinforcement learning framework that grounds video generation in physical laws through a dual-level objective: locally enforcing the temporal dynamics of individual physical principles, and globally ensuring the physical and semantic coherence of the entire scene. To support multi-principle generation, we construct a 50K-prompt dataset and introduce a prompt benchmark <b style="color:var(--ink)">MultiPhyBench</b>, spanning a diverse range of co-occurring physical events. Our experiments show that HiPhy significantly outperforms prior methods and baselines, improving physical commonsense and semantic alignment across various benchmarks &mdash; with the largest gains on scenes involving multiple physical principles, where competing methods degrade most sharply.
+      We propose <b style="color:var(--ink)">HiPhy</b> (<b>Hi</b>erarchical <b>Phy</b>sical Alignment), a reinforcement learning framework that grounds video generation in physical laws through a dual-level objective: locally enforcing the temporal dynamics of individual physical principles, and globally ensuring the physical and semantic coherence of the entire scene. To support multi-principle generation, we construct a 50K-prompt dataset and introduce a prompt benchmark <b style="color:var(--ink)">MultiPhyBench</b>, spanning a diverse range of co-occurring physical events. Our experiments show that HiPhy significantly outperforms prior methods and baselines, improving physical commonsense and semantic alignment across various benchmarks, with the largest gains on scenes involving multiple physical principles, where competing methods degrade most sharply.
     </p>
   </div>
 </section>
@@ -146,7 +146,7 @@
   <div class="wrap">
     <div class="section-head">
       <h2>Method</h2>
-      <p>Models aren&rsquo;t short on visual capability &mdash; given a detailed enough prompt they render individual principles with striking fidelity. The failure shows up specifically when several principles must unfold <i>together</i>, along two distinct axes.</p>
+      <p>Models aren&rsquo;t short on visual capability. Given a detailed enough prompt, they render individual principles with striking fidelity, but the failure shows up specifically when several principles must unfold <i>together</i>, along two distinct axes.</p>
     </div>
 
     <div class="method-grid">
@@ -154,11 +154,11 @@
         <ul class="failure-list">
           <li>
             <span class="dot">1</span>
-            <div><b>Principle Omission.</b><br><span>Secondary physics gets dropped entirely &mdash; the apple falls realistically, but the water it lands in stays undisturbed.</span></div>
+            <div><b>Principle Omission.</b><br><span>Secondary physics gets dropped entirely: the apple falls realistically, but the water it lands in stays undisturbed.</span></div>
           </li>
           <li>
             <span class="dot">2</span>
-            <div><b>Temporal Shortcutting.</b><br><span>Unfolding dynamics collapse into a single visual snapshot &mdash; a splash rendered as a static spraying effect instead of progressing through impact &rarr; crown formation &rarr; submersion.</span></div>
+            <div><b>Temporal Shortcutting.</b><br><span>Unfolding dynamics collapse into a single visual snapshot: a splash rendered as a static spraying effect instead of progressing through impact &rarr; crown formation &rarr; submersion.</span></div>
           </li>
         </ul>
         <p>HiPhy&rsquo;s dual-level design addresses both directly: per-principle supervision targets <b>Principle Omission</b>, while fine-grained sub-stage reward design addresses <b>Temporal Shortcutting</b>. At the foundational level, HiPhy explicitly optimizes the chronological progression of each physical event by breaking it into smaller stages; at the same time, it aligns these stages with global video coherence and semantic alignment objectives, so multi-principle interactions compose naturally.</p>
@@ -379,7 +379,7 @@
   <div class="wrap">
     <div class="section-head">
       <h2>Ablation</h2>
-      <p>HiPhy&rsquo;s hierarchical alignment objective is a training signal, not an architecture &mdash; it transfers across different video diffusion backbones.</p>
+      <p>HiPhy&rsquo;s hierarchical alignment objective is a training signal, not an architecture, so it transfers across different video diffusion backbones.</p>
     </div>
 
     <p class="pair-prompt" style="text-align:center; font-size:1.05rem; margin-bottom:28px">&ldquo;A coin dances in a spiral on the table.&rdquo;</p>
